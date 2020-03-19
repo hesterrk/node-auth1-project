@@ -8,6 +8,9 @@ function App() {
     <div className="App">
       <h3>My Auth App</h3>
       <Switch>
+      <Route exact path="/">
+          <HomePage />
+        </Route>
         <Route exact path="/login">
           <Login />
         </Route>
