@@ -5,7 +5,8 @@ const router = express.Router({
   });
 const Usershelper = require("../users/users-model.js");
 
-const bycrypt = require("bcryptjs")
+const bcrypt = require("bcryptjs");
+const restricted = require("../middleware/restricted-middleware")
 
 
 // /api/auth/register   -->POST register
@@ -27,9 +28,10 @@ router.post("/login", async (req, res, next) => {
     let { username, password } = req.body;
     const user = await Usershelper.findBy({ username }).first();
 
-    const passwordValid = await bycrypt.compare(password, user.password)
+    const passwordValid = await bcrypt.compare(password, user.password)
 
     if (user && passwordValid) {
+      req.session.user = user;
       res.status(200).json({ message: `Welcome ${user.username}!` });
     } else {
       res.status(401).json({ message: "Invalid Credentials" });
@@ -38,5 +40,35 @@ router.post("/login", async (req, res, next) => {
     next(error);
   }
 });
+
+//Our protected route:  
+
+router.get("/protected", restricted(), async (req, res, next) => {
+  try {
+    res.json({
+      message: "You are Authorised"
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+//Log-Out 
+router.get("/logout", restricted(), (req, res, next) => {
+  req.session.destroy((err) => {
+    if(err) {
+      next(err)
+    } else {
+      res.json({
+        message: "You are logged out successfully"
+      })
+    }
+  })
+})
+
+
+
+
+
 
 module.exports = router;
