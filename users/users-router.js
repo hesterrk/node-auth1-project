@@ -16,6 +16,9 @@ router.get("/", restricted(), async (req, res, next) => {
 
 
 //Local Middleware function that authorises user based on user and password based on req.headers for our Login endpoint: api/auth/login 
+//MOVE THIS INTO middelware folder and file and export to user route
+//UPDATE SO IT CHECKS FOR SESSION INSTEAD OF USERNAME AND PASSWORD
+
 
 function restricted() {
   const authError = {

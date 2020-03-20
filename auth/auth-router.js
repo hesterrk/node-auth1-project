@@ -12,7 +12,6 @@ const bycrypt = require("bcryptjs")
 router.post("/register", async (req, res, next) => {
   try {
     let user = req.body;
-    console.log(user)
     const saved = await Usershelper.add(user);
     res.status(201).json(saved);
   } catch (error) {
