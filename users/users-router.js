@@ -14,7 +14,4 @@ router.get("/", restricted(), async (req, res, next) => {
 
 
 
-
-
-
 module.exports = router;
